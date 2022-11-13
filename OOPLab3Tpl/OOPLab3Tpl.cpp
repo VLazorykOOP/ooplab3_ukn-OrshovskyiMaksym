@@ -107,3 +107,146 @@ int main()
 	cout << " End testing \n";
 	return 0;
 }
+
+
+
+
+//task 2 
+#include <iostream>
+#include <math.h>
+#include <clocale>
+using namespace std;
+enum STATE {
+	OK, BAD_INIT, BAD_DIV
+};
+
+
+class ComplexNumber {
+	float re;
+	float im;
+	int state;
+
+
+public: 
+	ComplexNumber() : re(0), im(0), state(0){}
+	ComplexNumber(float iv) : re(iv), im(iv) {}
+	ComplexNumber(float* p) {
+		if (p == nullptr) {
+			state = 4;
+			re = 0;
+			im = 0;
+		}
+		else {
+			re = p[0];
+			im = p[1];
+		}
+	}
+
+	ComplexNumber(const ComplexNumber&);
+	ComplexNumber :: ComplexNumber(const ComplexNumber& s) {
+		if (this == &s) return;
+		re = s.re; im = s.im;
+		count++;
+	}
+
+	void Input();
+	void Output();
+	bool CompLessAll(ComplexNumber& s);
+	static int getCount() {
+		if (count <= 0) cout << " Немає об'єктів ComplexNumber ";
+		return count;
+	}
+	int getState() { return state; }
+
+};
+	void ComplexNumber::Input() {
+		cout << "Input re and im: ";
+		cin >> im >> re;
+
+	}
+
+
+	void ComplexNumber::Otput() {
+		cout << "re = " << re << "im = " << im << "state = " << state << endl;
+	}
+
+	ComplexNumber ComplexNumber::Add(ComplexNumber& s) {
+		ComplexNumber tmp;
+		tmp.re = re + s.re;
+		tmp.im = im + s.im;
+		return tmp;
+	}
+
+	ComplexNumber ComplexNumber::Sub(ComplexNumber& s) {
+		ComplexNumber tmp;
+		tmp.re = re - s.re;
+		tmp.im = im - s.im;
+		return tmp;
+	}
+	
+	ComplexNumber ComplexNumber::Div(double d) {
+		ComplexNumber tmp;
+		if (fabs(d) < 1.e-25) {
+			tmp.state = BAD_DIV;
+			cout << " Error div \n";
+			return *this;
+		}
+		tmp.re = re / d;
+		tmp.im = im / d;
+		return tmp;
+	}
+	ComplexNumber ComplexNumber::Mul(double d) {
+		ComplexNumber tmp;
+		tmp.re = re * d;
+		tmp.im = im * d;
+		return tmp;
+	}
+	bool ComplexNumber::CompLessAll(ComplexNumber& s) {
+		if (re < s.re && im < s.im) return true;
+		return false;
+
+	}
+
+int main()
+{
+   
+	setlocale(LC_CTYPE, "ukr");
+	cout << "Тестування створенного класу \n";
+	cout << "Тестування конструкторiв \n";
+	ComplexNumber ObjCDef;
+	ObjCDef.Output();
+	ComplexNumber ObjP1(10.0);
+
+	ObjP1.Output();
+	double a = 1.0, b = 2.0;
+	ComplexNumber ObjP2(a, b);
+	ObjP2.Output();
+	ComplexNumber ObjCopy(ObjP2);
+	double* v = nullptr, v2[] = { 1.2, 3.3 };
+	ComplexNumber ObjP3(v2);
+	if (ObjP3.getState() != OK) cout << " ObjP3 re= 0 im= 0 \n";
+	ComplexNumber ObjP4(v2);
+	if (ObjP4.getState() != OK) cout << " ObjP4 re= 0 im= 0 \n";
+	cout << " Кiлькiсть створених об'єктiв Vec2 " << ComplexNumber::getCount() << endl;
+	cout << "Тестування введення \n";
+	ObjCDef.Input();
+	cout << "Тестування функцiй \n";
+	ObjCDef = ObjCDef.Add(ObjP2);
+	ObjCDef.Output();
+	cout << " \n Кiлькiсть створених об'єктiв ComplexNumber до Sub " << ComplexNumber::getCount() << endl;
+	ObjCDef = ObjCDef.Sub(ObjP2);
+	cout << " \n Кiлькiсть створених об'єктiв ComplexNumber пiсля Sub " << ComplexNumber::getCount() << endl;
+	ObjCDef.Output();
+	ObjCDef = ObjCDef.Mul(5);
+	ObjCDef.Output();
+	ObjCDef = ObjCDef.Div(1.3);
+	if (ObjCDef.getState() == STATE::BAD_DIV) cout << "BAD_DIV \n";
+	ObjCDef.Output();
+	ObjCDef = ObjCDef.Div(0.0);
+	if (ObjCDef.getState() == STATE::BAD_DIV) cout << "BAD_DIV \n";
+	ObjCDef.Output();
+	cout << "ObjCopy state " << ObjCopy.getState() << endl;
+	if (ObjCopy.CompLessAll(ObjCDef)) cout << "ObjCopy less ObjDef " << endl;
+	cout << "Завершення тестування \n";
+	return 1;
+}
