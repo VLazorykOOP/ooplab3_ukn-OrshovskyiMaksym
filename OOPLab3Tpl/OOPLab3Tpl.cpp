@@ -250,3 +250,104 @@ int main()
 	cout << "Завершення тестування \n";
 	return 1;
 }
+
+
+//task 3
+#include <iostream>
+using namespace std;
+
+class Vector {
+    long* v;
+    short size = 2;
+public:
+    Vector(): Vector(2){}
+    Vector(int n) {
+        if (n <= 0) size = 2;
+        else size = n;
+        v = new long[size];
+        for (int i = 0; i < size; i++) v[i] = 1;
+
+    }
+    void pr() {
+        for (int i = 0; i < size; i++) cout << v[i] << "\t";
+    }
+
+};
+
+class Matrix {
+    Vector* t;
+    short size = 2;
+public: 
+    Matrix(){}
+    Matrix(int n) {}
+    Matrix(int n, int m){
+        if (n <= 2) size = 2;
+        size = n;
+        t = new Vector[size];
+    }
+    void mr() {
+        for (int i = 0; i < size; i++) { t[i].pr(); cout << endl; }
+    }
+};
+
+bool Vector::Vector(Vector& size) {
+    if (n < size) return true;
+    return false;
+}
+
+void Vector::Input() {
+    if (size == 0) {
+        if (v) delete[] v;
+        do {
+            cout << "Input size Vec\n";
+            cin >> size;
+        } while (size <= 0);
+        v = new Vector[size];
+    }
+    for (int i = 0; i < num; i++) {
+        cout << " v [ " << i << " ] real img "; cin >> v[i] >> v[i]._Val[_IM];
+    }
+
+}
+
+
+Vector Vector::Add(Vector& s) {
+    Vector tmp;
+    tmp.v = v + s.v;
+    return tmp;
+}
+Vector Vector::Sub(Vector& s) {
+    Vector tmp;
+    tmp.v = v - s.v;
+    return tmp;
+}
+Vector Vector::Div(double d) {
+    Vector tmp;
+    if (fabs(d) < 1.e-25) {
+        tmp.state = BAD_DIV;
+        cout << " Error div \n";
+        return *this;
+    }
+    tmp.v = v / d;
+    return tmp;
+}
+Vector Vector::Mul(double d) {
+    Vector tmp;
+    tmp.v = v * d;
+    return tmp;
+}
+
+
+Vector Vector::Add(Vector& s) {
+    Vector tmp;
+    tmp.v = v + s.v;
+    return tmp;
+}
+
+int main()
+{
+    Matrix a(3, 4);
+    a.mr();
+    return 0;
+}
+
